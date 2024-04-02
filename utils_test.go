@@ -6,7 +6,7 @@ import (
 )
 
 func TestFormatHelpRow(t *testing.T) {
-	width := decideTerminalWidth()
+	width := getTerminalWidth()
 	header := "this is header"
 	if strings.Count(formatHelpRow(header, strings.Repeat("C", 50), len(header), 30, width, false),
 		"\n") > 0 {

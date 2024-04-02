@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func decideTerminalWidth() int {
+func getTerminalWidth() int {
 	// decide terminal width
 	cmd := exec.Command("stty", "size")
 	cmd.Stdin = os.Stdin // this is important

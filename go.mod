@@ -1,3 +1,3 @@
 module github.com/quaddimentional/argparse-expansion
 
-go 1.16
+go 1.22

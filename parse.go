@@ -2,6 +2,7 @@ package argparse
 
 import (
 	"fmt"
+	"maps"
 	"os"
 	"path"
 	"strings"
@@ -86,6 +87,19 @@ func NewParser(name string, description string, config *ParserConfig) *Parser {
 			&Option{Help: "show command completion script"})
 	}
 	return parser
+}
+
+func (p *Parser) GetName() string {
+	return p.name
+}
+
+func (p *Parser) GetArgs() map[string]*arg {
+	// Merge positional and non positional arguments
+	mergedArgs := make(map[string]*arg)
+	maps.Copy(mergedArgs, p.entryMap)
+	maps.Copy(mergedArgs, p.positionalPool)
+
+	return mergedArgs
 }
 
 func (p *Parser) registerArgument(a *arg) error {
@@ -184,7 +198,7 @@ func (p *Parser) FormatHelp() string {
 
 // FormatHelpWithColor allows you to generate a colorful help message with the given schema
 func (p *Parser) FormatHelpWithColor(schema *ColorSchema) string {
-	terminalWidth := decideTerminalWidth()
+	terminalWidth := getTerminalWidth()
 	result := wrapperColor(p.formatUsage(), schema.Usage)
 	if p.description != "" {
 		result += "\n\n" + wrapperColor(p.description, schema.Description)
