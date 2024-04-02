@@ -42,6 +42,10 @@ func (a *Arg) GetName() string {
 	return a.full
 }
 
+func (a *Arg) GetResult() interface{} {
+	return a.target
+}
+
 // validate args setting before parsing args, right after adding to parser
 // for conflict check & correction & restriction
 func (a *Arg) validate() error {

@@ -941,7 +941,11 @@ func TestParseAndIter(t *testing.T) {
 	}
 
 	for _, arg := range p.GetArgs() {
-		t.Log(arg.GetName())
+		if arg.GetName() == "help" {
+			continue
+		}
+
+		t.Log(arg.GetName(), fmt.Sprintf("%v", *arg.GetResult().(*string)))
 	}
 
 }
