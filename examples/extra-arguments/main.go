@@ -18,7 +18,7 @@ func main() {
 	// example:
 	// go run main.go x y -- --x --y
 	parser := argparse.NewParser("basic", "this is a basic program", nil)
-	names := parser.Strings("", "names", &argparse.Option{Positional: true})
+	names := parser.Strings("", "names", &Argparse.Option{Positional: true})
 	if e := parser.Parse(nil); e != nil {
 		switch e {
 		case argparse.BreakAfterHelpError:

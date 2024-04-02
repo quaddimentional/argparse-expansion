@@ -928,3 +928,20 @@ func TestParseWithExtra(t *testing.T) {
 		t.Error("failed to parse extra error")
 	}
 }
+
+func TestParseAndIter(t *testing.T) {
+	prompt := []string{"-s", "sos"}
+
+	p := NewParser("test", "pichanga", &ParserConfig{})
+	p.String("s", "tuput", &Option{})
+
+	err := p.Parse(prompt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for _, arg := range p.GetArgs() {
+		t.Log(arg.GetName())
+	}
+
+}

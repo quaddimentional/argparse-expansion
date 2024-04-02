@@ -11,10 +11,10 @@ import (
 )
 
 func main() {
-	parser := argparse.NewParser("", "", &argparse.ParserConfig{WithHint: true})
-	v := parser.Flag("v", "", &argparse.Option{Help: "version info"})
-	d := parser.Flag("d", "", &argparse.Option{Help: "some d"})
-	f := parser.Strings("f", "", &argparse.Option{Positional: true, Help: "file path", Required: true})
+	parser := argparse.NewParser("", "", &Argparse.ParserConfig{WithHint: true})
+	v := parser.Flag("v", "", &Argparse.Option{Help: "version info"})
+	d := parser.Flag("d", "", &Argparse.Option{Help: "some d"})
+	f := parser.Strings("f", "", &Argparse.Option{Positional: true, Help: "file path", Required: true})
 	if e := parser.Parse(nil); e != nil {
 		switch e.(type) {
 		case argparse.BreakAfterHelp:

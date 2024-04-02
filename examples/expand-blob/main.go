@@ -13,7 +13,7 @@ import (
 
 func main() {
 	parser := argparse.NewParser("basic", "this is a basic program", nil)
-	name := parser.Strings("n", "name", &argparse.Option{Positional: true})
+	name := parser.Strings("n", "name", &Argparse.Option{Positional: true})
 	files := parser.Strings("f", "file", nil)
 	if e := parser.Parse(nil); e != nil {
 		fmt.Println(e.Error())

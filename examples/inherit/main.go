@@ -13,7 +13,7 @@ import (
 
 func main() {
 	parser := argparse.NewParser("", "", nil)
-	verbose := parser.Flag("v", "", &argparse.Option{Inheritable: true,
+	verbose := parser.Flag("v", "", &Argparse.Option{Inheritable: true,
 		Help: "show verbose info"})
 	local := parser.AddCommand("local", "", nil)
 	service := parser.AddCommand("service", "", nil)
@@ -23,7 +23,7 @@ func main() {
 
 	addr := service.String("", "address", nil)
 	port := service.Int("", "port", nil)
-	version := service.Int("v", "version", &argparse.Option{Help: "version choice"})
+	version := service.Int("v", "version", &Argparse.Option{Help: "version choice"})
 
 	if e := parser.Parse(nil); e != nil {
 		switch e.(type) {

@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	parser := argparse.NewParser("basic", "this is a basic program", &argparse.ParserConfig{
+	parser := argparse.NewParser("basic", "this is a basic program", &Argparse.ParserConfig{
 		WithColor: true,
 		WithHint:  true,
 
@@ -21,11 +21,11 @@ func main() {
 	sub := parser.AddCommand("run", "run your program", nil)
 	parser.AddCommand("test", "test for your program", nil)
 
-	sub.Flag("d", "dir", &argparse.Option{Help: "give me a directory"})
-	parser.String("n", "name", &argparse.Option{Default: "flame", Help: "your name"})
-	parser.Ints("t", "times", &argparse.Option{HintInfo: "run times", Group: "base", Help: "how many times"})
-	parser.Float("s", "size", &argparse.Option{Help: "give me a size", Group: "base", Required: true})
-	parser.String("u", "url", &argparse.Option{Positional: true, Help: "target url"})
+	sub.Flag("d", "dir", &Argparse.Option{Help: "give me a directory"})
+	parser.String("n", "name", &Argparse.Option{Default: "flame", Help: "your name"})
+	parser.Ints("t", "times", &Argparse.Option{HintInfo: "run times", Group: "base", Help: "how many times"})
+	parser.Float("s", "size", &Argparse.Option{Help: "give me a size", Group: "base", Required: true})
+	parser.String("u", "url", &Argparse.Option{Positional: true, Help: "target url"})
 	parser.String("l", "", nil)
 	if e := parser.Parse(nil); e != nil {
 		switch e {

@@ -13,9 +13,9 @@ import (
 
 func main() {
 	parser := argparse.NewParser("basic", "this is a basic program",
-		&argparse.ParserConfig{AddShellCompletion: true})
+		&Argparse.ParserConfig{AddShellCompletion: true})
 	name := parser.String("n", "name", nil)
-	greet := parser.String("g", "greet", &argparse.Option{HideEntry: true})
+	greet := parser.String("g", "greet", &Argparse.Option{HideEntry: true})
 	if e := parser.Parse(nil); e != nil {
 		fmt.Println(e.Error())
 		return

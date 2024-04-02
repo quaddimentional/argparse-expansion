@@ -20,7 +20,7 @@ import (
 
 func main() {
 	parser := argparse.NewParser("basic", "this is a basic program", nil)
-	path := parser.String("f", "file", &argparse.Option{
+	path := parser.String("f", "file", &Argparse.Option{
 		Validate: func(arg string) error {
 			if _, e := os.Stat(arg); e != nil {
 				return fmt.Errorf("unable to access '%s'", arg)
@@ -28,7 +28,7 @@ func main() {
 			return nil
 		},
 	})
-	host := parser.String("u", "url", &argparse.Option{
+	host := parser.String("u", "url", &Argparse.Option{
 		Help: "give me some url to parse",
 		Formatter: func(arg string) (i interface{}, err error) {
 			u, err := url.ParseRequestURI(arg)

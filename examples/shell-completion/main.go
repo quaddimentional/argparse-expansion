@@ -19,10 +19,10 @@ import (
 
 func main() {
 	p := argparse.NewParser("start", "this is test",
-		&argparse.ParserConfig{AddShellCompletion: true})
+		&Argparse.ParserConfig{AddShellCompletion: true})
 	p.Strings("a", "aa", nil)
 	p.Int("", "bb", nil)
-	p.Float("c", "cc", &argparse.Option{Positional: true})
+	p.Float("c", "cc", &Argparse.Option{Positional: true})
 	test := p.AddCommand("test", "", nil)
 	test.String("a", "aa", nil)
 	test.Int("", "bb", nil)

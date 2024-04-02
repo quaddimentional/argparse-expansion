@@ -17,7 +17,7 @@ import (
 )
 
 func main() {
-	parser := argparse.NewParser("", "this is a basic program", &argparse.ParserConfig{
+	parser := argparse.NewParser("", "this is a basic program", &Argparse.ParserConfig{
 		DisableHelp:            true,
 		DisableDefaultShowHelp: true})
 	name := parser.String("n", "name", nil)

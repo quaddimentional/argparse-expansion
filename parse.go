@@ -22,13 +22,13 @@ type Parser struct {
 	showHelp            *bool // flag to decide show help message
 	showShellCompletion *bool // flag to decide show shell completion
 
-	entries        []*arg
-	entryMap       map[string]*arg
-	positionArgs   []*arg
-	positionalPool map[string]*arg
+	entries        []*Arg
+	entryMap       map[string]*Arg
+	positionArgs   []*Arg
+	positionalPool map[string]*Arg
 
 	entryGroupOrder []string
-	entryGroup      map[string][]*arg
+	entryGroup      map[string][]*Arg
 
 	subParser    []*Parser
 	subParserMap map[string]*Parser
@@ -67,13 +67,13 @@ func NewParser(name string, description string, config *ParserConfig) *Parser {
 		description: description,
 		config:      config,
 
-		entries:         []*arg{},
-		entryMap:        make(map[string]*arg),
-		entryGroup:      make(map[string][]*arg),
+		entries:         []*Arg{},
+		entryMap:        make(map[string]*Arg),
+		entryGroup:      make(map[string][]*Arg),
 		entryGroupOrder: []string{},
 
-		positionArgs:   []*arg{},
-		positionalPool: make(map[string]*arg),
+		positionArgs:   []*Arg{},
+		positionalPool: make(map[string]*Arg),
 
 		subParser:    []*Parser{},
 		subParserMap: make(map[string]*Parser),
@@ -93,16 +93,33 @@ func (p *Parser) GetName() string {
 	return p.name
 }
 
-func (p *Parser) GetArgs() map[string]*arg {
+func (p *Parser) GetArgs() map[string]*Arg {
 	// Merge positional and non positional arguments
-	mergedArgs := make(map[string]*arg)
+	mergedArgs := make(map[string]*Arg)
 	maps.Copy(mergedArgs, p.entryMap)
 	maps.Copy(mergedArgs, p.positionalPool)
 
-	return mergedArgs
+	// Remove duplicates
+	uniqueArgs := make(map[string]*Arg)
+
+	for mergKey, mergArg := range mergedArgs {
+		argExist := false
+		for _, uniArg := range uniqueArgs {
+			if uniArg == mergArg {
+				argExist = true
+				break
+			}
+		}
+
+		if !argExist {
+			uniqueArgs[mergKey] = mergArg
+		}
+	}
+
+	return uniqueArgs
 }
 
-func (p *Parser) registerArgument(a *arg) error {
+func (p *Parser) registerArgument(a *Arg) error {
 	if a.BindParsers != nil {
 		backup := a.BindParsers
 		a.BindParsers = nil
@@ -718,7 +735,7 @@ func (p *Parser) Flag(short, full string, opts *Option) *bool {
 		opts = &Option{}
 	}
 	opts.isFlag = true
-	if e := p.registerArgument(&arg{
+	if e := p.registerArgument(&Arg{
 		short:  short,
 		full:   full,
 		target: &result,
@@ -739,7 +756,7 @@ func (p *Parser) String(short, full string, opts *Option) *string {
 	if opts == nil {
 		opts = &Option{}
 	}
-	if e := p.registerArgument(&arg{
+	if e := p.registerArgument(&Arg{
 		short:  short,
 		full:   full,
 		target: &result,
@@ -761,7 +778,7 @@ func (p *Parser) Strings(short, full string, opts *Option) *[]string {
 		opts = &Option{}
 	}
 	opts.multi = true
-	if e := p.registerArgument(&arg{
+	if e := p.registerArgument(&Arg{
 		short:  short,
 		full:   full,
 		target: &result,
@@ -782,7 +799,7 @@ func (p *Parser) Int(short, full string, opts *Option) *int {
 	if opts == nil {
 		opts = &Option{}
 	}
-	if e := p.registerArgument(&arg{
+	if e := p.registerArgument(&Arg{
 		short:  short,
 		full:   full,
 		target: &result,
@@ -804,7 +821,7 @@ func (p *Parser) Ints(short, full string, opts *Option) *[]int {
 		opts = &Option{}
 	}
 	opts.multi = true
-	if e := p.registerArgument(&arg{
+	if e := p.registerArgument(&Arg{
 		short:  short,
 		full:   full,
 		target: &result,
@@ -825,7 +842,7 @@ func (p *Parser) Float(short, full string, opts *Option) *float64 {
 	if opts == nil {
 		opts = &Option{}
 	}
-	if e := p.registerArgument(&arg{
+	if e := p.registerArgument(&Arg{
 		short:  short,
 		full:   full,
 		target: &result,
@@ -847,7 +864,7 @@ func (p *Parser) Floats(short, full string, opts *Option) *[]float64 {
 		opts = &Option{}
 	}
 	opts.multi = true
-	if e := p.registerArgument(&arg{
+	if e := p.registerArgument(&Arg{
 		short:  short,
 		full:   full,
 		target: &result,

@@ -23,7 +23,7 @@ import (
 
 func main() {
 	parser := argparse.NewParser("basic", "this is a basic program",
-		&argparse.ParserConfig{
+		&Argparse.ParserConfig{
 			Usage:                  "basic xxx",
 			EpiLog:                 "more detail please visit https://github.com/hellflame/argparse",
 			DisableHelp:            true,

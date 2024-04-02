@@ -13,10 +13,10 @@ import (
 )
 
 func main() {
-	parse := argparse.NewParser("", "", &argparse.ParserConfig{DisableHelp: true})
-	parse.Strings("f", "first", &argparse.Option{Help: "this is first"})
-	parse.String("s", "second", &argparse.Option{Help: "this is second"})
-	parse.Flag("h", "help", &argparse.Option{
+	parse := argparse.NewParser("", "", &Argparse.ParserConfig{DisableHelp: true})
+	parse.Strings("f", "first", &Argparse.Option{Help: "this is first"})
+	parse.String("s", "second", &Argparse.Option{Help: "this is second"})
+	parse.Flag("h", "help", &Argparse.Option{
 		Help: "show this help at bottom",
 		Action: func(a []string) error {
 			fmt.Println("============")

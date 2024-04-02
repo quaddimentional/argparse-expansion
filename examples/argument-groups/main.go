@@ -11,17 +11,17 @@ import (
 )
 
 func main() {
-	p := argparse.NewParser("", "this is a show case about groups", &argparse.ParserConfig{DisableHelp: true, EpiLog: "try more"})
+	p := argparse.NewParser("", "this is a show case about groups", &Argparse.ParserConfig{DisableHelp: true, EpiLog: "try more"})
 	p.Flag("n", "normal", nil)
-	p.Float("f", "float", &argparse.Option{Positional: true})
+	p.Float("f", "float", &Argparse.Option{Positional: true})
 
-	p.String("a", "aa", &argparse.Option{Group: "As", Help: "normal a"})
-	p.String("aaa", "", &argparse.Option{Group: "As", Help: "triple a", Positional: true})
+	p.String("a", "aa", &Argparse.Option{Group: "As", Help: "normal a"})
+	p.String("aaa", "", &Argparse.Option{Group: "As", Help: "triple a", Positional: true})
 
-	p.Int("b", "bb", &argparse.Option{Group: "Bs", Help: "normal b"})
-	p.Ints("", "bbb", &argparse.Option{Group: "Bs", Help: "triple b"})
+	p.Int("b", "bb", &Argparse.Option{Group: "Bs", Help: "normal b"})
+	p.Ints("", "bbb", &Argparse.Option{Group: "Bs", Help: "triple b"})
 
-	help := p.Flag("h", "", &argparse.Option{Group: "General", Help: "show help info"})
+	help := p.Flag("h", "", &Argparse.Option{Group: "General", Help: "show help info"})
 	if e := p.Parse(nil); e != nil {
 		switch e.(type) {
 		case argparse.BreakAfterHelp:

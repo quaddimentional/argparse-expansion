@@ -97,7 +97,7 @@ Based on those points above, the code can be altered like this:
 
 ```go
 func main() {
-    parser := argparse.NewParser("", "this is a basic program", &argparse.ParserConfig{
+    parser := argparse.NewParser("", "this is a basic program", &Argparse.ParserConfig{
         DisableHelp:true,
         DisableDefaultShowHelp: true})
   
@@ -184,7 +184,7 @@ For example: `./run -- extra1 extra2`.  In the example, `extra1`  and `extra2` c
 If the last positional argument receives multiple inputs, then the positional inputs before and after `--` will all be its value.
 
 ```go
-names := parser.Strings("", "names", &argparse.Option{Positional: true})
+names := parser.Strings("", "names", &Argparse.Option{Positional: true})
 parser.parse([]string{"a", "--", "b", "c"})
 // names == ["a", "b", "c"]
 ```
@@ -286,7 +286,7 @@ You can check file's existence before reading it, and tells if it's a valid file
 Though the return type is still a `string` , but it's more garanteed to use them
 
 ```go
-path := parser.String("f", "file", &argparse.Option{
+path := parser.String("f", "file", &Argparse.Option{
   Validate: func(arg string) error {
     if _, e := os.Stat(arg); e != nil {
       return fmt.Errorf("unable to access '%s'", arg)
@@ -347,7 +347,7 @@ Checkout `Action` for example, then you can handle any type when parsing argumen
 Argument group is useful to arrange arguments help info in to groups, only affects how the help info displays, use `Group` config to do so. [example](examples/yt-download/main.go)
 
 ```go
-parser.Flag("", "version", &argparse.Option{
+parser.Flag("", "version", &Argparse.Option{
   Help: "Print program version and exit", 
   Group: "General Options",
 })
@@ -358,7 +358,7 @@ parser.Flag("", "version", &argparse.Option{
 When the full name of the argument is too long to display, `Meta` can change how it displays in help info. More Control can be optimized by __MaxHeaderLength__. [example](examples/yt-download/main.go)
 
 ```go
-parser.Int("", "playlist-start", &argparse.Option{
+parser.Int("", "playlist-start", &Argparse.Option{
   Help: "Playlist video to start at (default is 1)", 
   Meta: "NUMBER",
 })
@@ -375,7 +375,7 @@ It will look like this in help message:
 If the argument is not specified by user, default value will be applied. [example](examples/yt-download/main.go)
 
 ```go
-parser.Int("", "playlist-start", &argparse.Option{
+parser.Int("", "playlist-start", &Argparse.Option{
   Help: "Playlist video to start at (default is 1)", 
   Default: "1",
 })
@@ -390,7 +390,7 @@ Also, the Default value can only be a `String` , and if you want an Array of arg
 If the argument must be specified by the user, set `Required` to be `true`. [example](examples/yt-download/main.go)
 
 ```go
-parser.Strings("", "url", &argparse.Option{
+parser.Strings("", "url", &Argparse.Option{
   Help: "youtube links, like 'https://www.youtube.com/watch?v=xxxxxxxx'", 
   Required: true,
 })
@@ -403,7 +403,7 @@ Flag argument can not be `Required` (flag argument has more [restrictions](#rest
 If you want users to input arguments by position, set `Positional` to be true. [example](examples/yt-download/main.go)
 
 ```go
-parser.Strings("", "url", &argparse.Option{
+parser.Strings("", "url", &Argparse.Option{
   Help: "youtube links, like 'https://www.youtube.com/watch?v=xxxxxxxx'", 
   Positional: true,
 })
@@ -421,7 +421,7 @@ So, use it carefully, it may __confuse__ (for the users), which is the same in a
 Provide `Validate` function to check every one of its argument
 
 ```go
-parser.Strings("", "url", &argparse.Option{
+parser.Strings("", "url", &Argparse.Option{
   Help: "youtube links", 
   Validate: func(arg string) error {
     if !strings.HasPrefix(arg, "https://") {
@@ -484,11 +484,11 @@ Create new parser scope, arguments won't interrupt other parsers(root parser and
 ```go
 func main() {
   parser := argparse.NewParser("sub-command", "Go is a tool for managing Go source code.", nil)
-  t := parser.Flag("f", "flag", &argparse.Option{Help: "from main parser"})
+  t := parser.Flag("f", "flag", &Argparse.Option{Help: "from main parser"})
   testCommand := parser.AddCommand("test", "start a bug report", nil)
-  tFlag := testCommand.Flag("f", "flag", &argparse.Option{Help: "from test parser"})
+  tFlag := testCommand.Flag("f", "flag", &Argparse.Option{Help: "from test parser"})
   otherFlag := testCommand.Flag("o", "other", nil)
-  defaultInt := testCommand.Int("i", "int", &argparse.Option{Default: "1"})
+  defaultInt := testCommand.Int("i", "int", &Argparse.Option{Default: "1"})
   if e := parser.Parse(nil); e != nil {
     fmt.Println(e.Error())
     return
@@ -583,10 +583,10 @@ A few points:
 Instead of showing help message as default, you can set your own default action when no user input is given, [example](examples/parse-action/main.go)
 
 ```go
-parser := argparse.NewParser("basic", "this is a basic program", &argparse.ParserConfig{DefaultAction: func() {
+parser := argparse.NewParser("basic", "this is a basic program", &Argparse.ParserConfig{DefaultAction: func() {
   fmt.Println("hi ~\ntell me what to do?")
 }})
-parser.AddCommand("test", "testing", &argparse.ParserConfig{DefaultAction: func() {
+parser.AddCommand("test", "testing", &Argparse.ParserConfig{DefaultAction: func() {
   fmt.Println("ok, now you know we are testing")
 }})
 if e := parser.Parse(nil); e != nil {
@@ -606,10 +606,10 @@ Users can get terminal hint through tapping [tab]
 Set `ParserConfig.AddShellCompletion` to `true` will register `--completion` to the parser. [example](examples/shell-completion/main.go)
 
 ```go
-p := argparse.NewParser("start", "this is test", &argparse.ParserConfig{AddShellCompletion: true})
+p := argparse.NewParser("start", "this is test", &Argparse.ParserConfig{AddShellCompletion: true})
 p.Strings("a", "aa", nil)
 p.Int("", "bb", nil)
-p.Float("c", "cc", &argparse.Option{Positional: true})
+p.Float("c", "cc", &Argparse.Option{Positional: true})
 test := p.AddCommand("test", "", nil)
 test.String("a", "aa", nil)
 test.Int("", "bb", nil)
@@ -651,7 +651,7 @@ You only need to set `Option{HideEntry: true}`
 func main() {
   parser := argparse.NewParser("basic", "this is a basic program", nil)
   name := parser.String("n", "name", nil)
-  greet := parser.String("g", "greet", &argparse.Option{HideEntry: true})
+  greet := parser.String("g", "greet", &Argparse.Option{HideEntry: true})
   if e := parser.Parse(nil); e != nil {
     fmt.Println(e.Error())
     return
@@ -729,11 +729,11 @@ options:
   --string STRING, -s STRING  no hint message
 ```
 
-Enable global hint by setting parser config `&argparse.ParserConfig{WithHint: true}` .
+Enable global hint by setting parser config `&Argparse.ParserConfig{WithHint: true}` .
 
-Disable one argument hint with `&argparse.Option{NoHint: true}`
+Disable one argument hint with `&Argparse.Option{NoHint: true}`
 
-Customize argument hint with `&argparse.Option{HintInfo: "customize info"}`
+Customize argument hint with `&Argparse.Option{HintInfo: "customize info"}`
 
 [example](examples/sub-command)
 
@@ -781,8 +781,8 @@ sub := parser.AddCommand("sub", "", nil)
 sub2 := parser.AddCommand("sub2", "", nil)
 
 url := ""
-for _, p := range []*argparse.Parser{parser, sub, sub2} {
-    p.String("", "url", &argparse.Option{Action: func(args []string) error {
+for _, p := range []*Argparse.Parser{parser, sub, sub2} {
+    p.String("", "url", &Argparse.Option{Action: func(args []string) error {
         url = args[0]
         return nil
     }})
@@ -794,14 +794,14 @@ if e := parser.Parse(nil); e != nil {
 print(url)
 ```
 
-The code above might be less clean, and there comes `Inheritable` , which is an `argument option` . When argument sets __`&argparse.Option{Inheritable: true}`__, sub parsers added __after__ the argument will be able to inherit this argument or override it.
+The code above might be less clean, and there comes `Inheritable` , which is an `argument option` . When argument sets __`&Argparse.Option{Inheritable: true}`__, sub parsers added __after__ the argument will be able to inherit this argument or override it.
 
 ```go
 parser := argparse.NewParser("", "", nil)
-verbose := parser.Flag("v", "", &argparse.Option{Inheritable: true, Help: "show verbose info"}) // inheritable argument
+verbose := parser.Flag("v", "", &Argparse.Option{Inheritable: true, Help: "show verbose info"}) // inheritable argument
 local := parser.AddCommand("local", "", nil)
 service := parser.AddCommand("service", "", nil)
-version := service.Int("v", "version", &argparse.Option{Help: "choose version"})
+version := service.Int("v", "version", &Argparse.Option{Help: "choose version"})
 ```
 
 As a result,  sub parser `local` will inhert `verbose` as a `Flag`, when pass user input `program local -v`, `*verbose` will be `true`, which means `*verbose` is shared among root parser and inherited parsers. However, as prefix `v` is also registered as `Int` by sub parser `service`, you can't use `-v` to `show verbose`, but `choose version` , it's `overrided`.
@@ -822,17 +822,17 @@ a := parser.AddCommand("a", "", nil)
 b := parser.AddCommand("b", "", nil)
 c := parser.AddCommand("c", "", nil)
 
-ab := parser.String("", "ab", &argparse.Option{
-    BindParsers: []*argparse.Parser{a, b},
+ab := parser.String("", "ab", &Argparse.Option{
+    BindParsers: []*Argparse.Parser{a, b},
 })
-bc := parser.String("", "bc", &argparse.Option{
-    BindParsers: []*argparse.Parser{b, c},
+bc := parser.String("", "bc", &Argparse.Option{
+    BindParsers: []*Argparse.Parser{b, c},
 })
 ```
 
 As a result, subparser `a` & `b` will bind a `String` argument with entry `--ab` and referred to by var `ab` , subparser `b` & `c` will bind a `String` argument with entry `--bc` and referred to by var `bc`. 
 
-__Note__ that both arguments are detached from main `parser`, because you've set the `BindParsers`. If you still want to bind the argument to the main parser, append it to `BindParsers`, like `BindParsers: []*argparse.Parser{b, c, parser}`.
+__Note__ that both arguments are detached from main `parser`, because you've set the `BindParsers`. If you still want to bind the argument to the main parser, append it to `BindParsers`, like `BindParsers: []*Argparse.Parser{b, c, parser}`.
 
 This is one way to share a single argument among different parsers. Be aware that creating argument like this still need to go through conflict check, if there's already a `--ab` exist in `a` or `b` parser, there will be a panic to notice the programer.
 
@@ -883,7 +883,7 @@ The return value of last process will be the input of next process, if shows it 
 ```python
 with MatchFound:
   if MatchFound.BindAction:
-    return MatchFound.BindAction(*args)
+    return MatchFound.BindAction(*Args)
   else:
     for arg in args:
       if Validate(arg):
@@ -929,7 +929,7 @@ example:
 ```go
 func main() {
   parser := argparse.NewParser("basic", "this is a basic program",
-		&argparse.ParserConfig{
+		&Argparse.ParserConfig{
       Usage:                  "basic xxx",
       EpiLog:                 "more detail please visit https://github.com/hellflame/argparse",
       DisableHelp:            true,

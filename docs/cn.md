@@ -91,7 +91,7 @@ hello hellflame
 
 ```go
 func main() {
-    parser := argparse.NewParser("", "this is a basic program", &argparse.ParserConfig{
+    parser := argparse.NewParser("", "this is a basic program", &Argparse.ParserConfig{
         DisableHelp:true,
         DisableDefaultShowHelp: true})
   
@@ -180,7 +180,7 @@ if e := parser.Parse([]string{"--ax"}); e != nil {
 如果最后一个位置参数接受多个入参，那么用户在 `--` 前后的位置入参都会当作这个位置参数的值。
 
 ```go
-names := parser.Strings("", "names", &argparse.Option{Positional: true})
+names := parser.Strings("", "names", &Argparse.Option{Positional: true})
 parser.parse([]string{"a", "--", "b", "c"})
 // names == ["a", "b", "c"]
 ```
@@ -282,7 +282,7 @@ Python代码如 `add_argument("-s", "--full", type=double, nargs="*")`
 虽然返回类型依然是字符串，但在用这个参数的时候会更有保障
 
 ```go
-path := parser.String("f", "file", &argparse.Option{
+path := parser.String("f", "file", &Argparse.Option{
   Validate: func(arg string) error {
     if _, e := os.Stat(arg); e != nil {
       return fmt.Errorf("unable to access '%s'", arg)
@@ -345,7 +345,7 @@ func dealFile(path) {
 命令组适合在帮助信息里将参数分组展示。这只会影响帮助信息的显示，没别的作用。使用配置里的 `Group` 来实现[example](../examples/yt-download/main.go)
 
 ```go
-parser.Flag("", "version", &argparse.Option{
+parser.Flag("", "version", &Argparse.Option{
   Help: "Print program version and exit", 
   Group: "General Options",
 })
@@ -356,7 +356,7 @@ parser.Flag("", "version", &argparse.Option{
 当参数的完整名称太长，修改元信息可以改变帮助信息里的展示内容[example](../examples/yt-download/main.go)
 
 ```go
-parser.Int("", "playlist-start", &argparse.Option{
+parser.Int("", "playlist-start", &Argparse.Option{
   Help: "Playlist video to start at (default is 1)", 
   Meta: "NUMBER",
 })
@@ -373,7 +373,7 @@ parser.Int("", "playlist-start", &argparse.Option{
 如果参数没有给，那么就会使用默认参数，[example](../examples/yt-download/main.go)
 
 ```go
-parser.Int("", "playlist-start", &argparse.Option{
+parser.Int("", "playlist-start", &Argparse.Option{
   Help: "Playlist video to start at (default is 1)", 
   Default: "1",
 })
@@ -388,7 +388,7 @@ parser.Int("", "playlist-start", &argparse.Option{
 如果要求用户必须输入该参数, 设 `Required` 为 `true` 即可, [example](../examples/yt-download/main.go)
 
 ```go
-parser.Strings("", "url", &argparse.Option{
+parser.Strings("", "url", &Argparse.Option{
   Help: "youtube links, like 'https://www.youtube.com/watch?v=xxxxxxxx'", 
   Required: true,
 })
@@ -401,7 +401,7 @@ parser.Strings("", "url", &argparse.Option{
 如果用户输入即为想要获取的参数, 设置 `Positional` 为 true 即可, [example](../examples/yt-download/main.go)
 
 ```go
-parser.Strings("", "url", &argparse.Option{
+parser.Strings("", "url", &Argparse.Option{
   Help: "youtube links, like 'https://www.youtube.com/watch?v=xxxxxxxx'", 
   Positional: true,
 })
@@ -419,7 +419,7 @@ parser.Strings("", "url", &argparse.Option{
 提供 `Validate` 方法来检查每一个输入参数
 
 ```go
-parser.Strings("", "url", &argparse.Option{
+parser.Strings("", "url", &Argparse.Option{
   Help: "youtube links", 
   Validate: func(arg string) error {
     if !strings.HasPrefix(arg, "https://") {
@@ -478,11 +478,11 @@ parser.Ints("", "hours", &Option{
 ```go
 func main() {
   parser := argparse.NewParser("sub-command", "Go is a tool for managing Go source code.", nil)
-  t := parser.Flag("f", "flag", &argparse.Option{Help: "from main parser"})
+  t := parser.Flag("f", "flag", &Argparse.Option{Help: "from main parser"})
   testCommand := parser.AddCommand("test", "start a bug report", nil)
-  tFlag := testCommand.Flag("f", "flag", &argparse.Option{Help: "from test parser"})
+  tFlag := testCommand.Flag("f", "flag", &Argparse.Option{Help: "from test parser"})
   otherFlag := testCommand.Flag("o", "other", nil)
-  defaultInt := testCommand.Int("i", "int", &argparse.Option{Default: "1"})
+  defaultInt := testCommand.Int("i", "int", &Argparse.Option{Default: "1"})
   if e := parser.Parse(nil); e != nil {
     fmt.Println(e.Error())
     return
@@ -577,10 +577,10 @@ fmt.Println(sum)  // this is a 6 if everything goes on fine
 如果不想默认显示帮助信息, 现在如果用户没有任何输入，你可以设置自己的默认行为, [example](../examples/parse-action/main.go)
 
 ```go
-parser := argparse.NewParser("basic", "this is a basic program", &argparse.ParserConfig{DefaultAction: func() {
+parser := argparse.NewParser("basic", "this is a basic program", &Argparse.ParserConfig{DefaultAction: func() {
   fmt.Println("hi ~\ntell me what to do?")
 }})
-parser.AddCommand("test", "testing", &argparse.ParserConfig{DefaultAction: func() {
+parser.AddCommand("test", "testing", &Argparse.ParserConfig{DefaultAction: func() {
   fmt.Println("ok, now you know you are testing")
 }})
 if e := parser.Parse(nil); e != nil {
@@ -600,10 +600,10 @@ if e := parser.Parse(nil); e != nil {
 设置 `ParserConfig.AddShellCompletion` 为 `true` 将注册 `--completion` 参数, [example](../examples/shell-completion/main.go)
 
 ```go
-p := argparse.NewParser("start", "this is test", &argparse.ParserConfig{AddShellCompletion: true})
+p := argparse.NewParser("start", "this is test", &Argparse.ParserConfig{AddShellCompletion: true})
 p.Strings("a", "aa", nil)
 p.Int("", "bb", nil)
-p.Float("c", "cc", &argparse.Option{Positional: true})
+p.Float("c", "cc", &Argparse.Option{Positional: true})
 test := p.AddCommand("test", "", nil)
 test.String("a", "aa", nil)
 test.Int("", "bb", nil)
@@ -647,7 +647,7 @@ eval `start --completion`
 func main() {
   parser := argparse.NewParser("basic", "this is a basic program", nil)
   name := parser.String("n", "name", nil)
-  greet := parser.String("g", "greet", &argparse.Option{HideEntry: true})
+  greet := parser.String("g", "greet", &Argparse.Option{HideEntry: true})
   if e := parser.Parse(nil); e != nil {
     fmt.Println(e.Error())
     return
@@ -725,11 +725,11 @@ options:
   --string STRING, -s STRING  no hint message
 ```
 
-通过设置 `&argparse.ParserConfig{WithHint: true}` 开启帮助提示信息。
+通过设置 `&Argparse.ParserConfig{WithHint: true}` 开启帮助提示信息。
 
-设置 `&argparse.Option{NoHint: true}` 禁用某个参数提示
+设置 `&Argparse.Option{NoHint: true}` 禁用某个参数提示
 
-通过 `&argparse.Option{HintInfo: "customize info"}` 自定义参数提示
+通过 `&Argparse.Option{HintInfo: "customize info"}` 自定义参数提示
 
 [example](../examples/sub-command)
 
@@ -777,8 +777,8 @@ sub := parser.AddCommand("sub", "", nil)
 sub2 := parser.AddCommand("sub2", "", nil)
 
 url := ""
-for _, p := range []*argparse.Parser{parser, sub, sub2} {
-    p.String("", "url", &argparse.Option{Action: func(args []string) error {
+for _, p := range []*Argparse.Parser{parser, sub, sub2} {
+    p.String("", "url", &Argparse.Option{Action: func(args []string) error {
         url = args[0]
         return nil
     }})
@@ -790,14 +790,14 @@ if e := parser.Parse(nil); e != nil {
 print(url)
 ```
 
-代码可能看起来没有那么整洁，所以诞生了 `Inheritable` 这一参数配置项。当设置参数 `&argparse.Option{Inheritable: true}` , 在这__之后__的子命令将可以继承该命令或者重载这一参数。
+代码可能看起来没有那么整洁，所以诞生了 `Inheritable` 这一参数配置项。当设置参数 `&Argparse.Option{Inheritable: true}` , 在这__之后__的子命令将可以继承该命令或者重载这一参数。
 
 ```go
 parser := argparse.NewParser("", "", nil)
-verbose := parser.Flag("v", "", &argparse.Option{Inheritable: true, Help: "show verbose info"}) // inheritable argument
+verbose := parser.Flag("v", "", &Argparse.Option{Inheritable: true, Help: "show verbose info"}) // inheritable argument
 local := parser.AddCommand("local", "", nil)
 service := parser.AddCommand("service", "", nil)
-version := service.Int("v", "version", &argparse.Option{Help: "version choice"})
+version := service.Int("v", "version", &Argparse.Option{Help: "version choice"})
 ```
 
 最终，子命令 `local` 会继承标志参数 `verbose` , 如果用户输入 `program local -v`, `*verbose` 将变成 `true`，这意味着 `*verbose` 在根命令和继承了该参数的子命令间是共享的。
@@ -818,17 +818,17 @@ a := parser.AddCommand("a", "", nil)
 b := parser.AddCommand("b", "", nil)
 c := parser.AddCommand("c", "", nil)
 
-ab := parser.String("", "ab", &argparse.Option{
-    BindParsers: []*argparse.Parser{a, b},
+ab := parser.String("", "ab", &Argparse.Option{
+    BindParsers: []*Argparse.Parser{a, b},
 })
-bc := parser.String("", "bc", &argparse.Option{
-    BindParsers: []*argparse.Parser{b, c},
+bc := parser.String("", "bc", &Argparse.Option{
+    BindParsers: []*Argparse.Parser{b, c},
 })
 ```
 
 如此这般，子解析器 `a` 和 `b` 将绑定一个入口为 `--ab` 的 `String` 类型的参数，通过变量 `ab` 来引用；子解析器 `b` 和 `c` 将绑定一个入口为 `--bc` 的 `String` 类型参数，通过变量 `bc` 来引用。
 
-__注意__ 两个参数都已经和主解析器解绑了，因为你已经主动指定了 `BindParsers`。如果你依然想要把这个参数绑定到主解析器上，那么就把主解析器追加到 `BindParsers` 即可，如: `BindParsers: []*argparse.Parser{b, c, parser}`。
+__注意__ 两个参数都已经和主解析器解绑了，因为你已经主动指定了 `BindParsers`。如果你依然想要把这个参数绑定到主解析器上，那么就把主解析器追加到 `BindParsers` 即可，如: `BindParsers: []*Argparse.Parser{b, c, parser}`。
 
 通过这种方式可以在不同的解析器之间共享一个参数。但是注意这种创建方式依然需要进行冲突检测，如果 `a` 或者 `b` 已经绑定了一个 `--ab` 的参数，那么程序员就会收到一个panic。
 
@@ -879,7 +879,7 @@ __注意__ 两个参数都已经和主解析器解绑了，因为你已经主动
 ```python
 with MatchFound:
   if MatchFound.BindAction:
-    return MatchFound.BindAction(*args)
+    return MatchFound.BindAction(*Args)
   else:
     for arg in args:
       if Validate(arg):
@@ -925,7 +925,7 @@ type ParserConfig struct {
 ```go
 func main() {
   parser := argparse.NewParser("basic", "this is a basic program",
-		&argparse.ParserConfig{
+		&Argparse.ParserConfig{
       Usage:                  "basic xxx",
       EpiLog:                 "more detail please visit https://github.com/hellflame/argparse",
       DisableHelp:            true,

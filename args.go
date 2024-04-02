@@ -9,7 +9,7 @@ import (
 const fullPrefix = "--"
 const shortPrefix = "-"
 
-type arg struct {
+type Arg struct {
 	short    string
 	full     string
 	target   interface{}
@@ -38,9 +38,13 @@ type Option struct {
 	BindParsers []*Parser                             // specify parsers to bind
 }
 
+func (a *Arg) GetName() string {
+	return a.full
+}
+
 // validate args setting before parsing args, right after adding to parser
 // for conflict check & correction & restriction
-func (a *arg) validate() error {
+func (a *Arg) validate() error {
 	if a.full == "" && a.short == "" { // argument must has a name
 		return fmt.Errorf("arg name is empty")
 	}
@@ -80,7 +84,7 @@ func (a *arg) validate() error {
 }
 
 // get argument watch list for parser use
-func (a *arg) getWatchers() []string {
+func (a *Arg) getWatchers() []string {
 	if a.Positional { // positional argument has nothing to watch, only positions
 		return []string{}
 	}
@@ -94,14 +98,14 @@ func (a *arg) getWatchers() []string {
 	return result
 }
 
-func (a *arg) getMetaName() string {
+func (a *Arg) getMetaName() string {
 	if a.Meta != "" {
 		return a.Meta // Meta variable given by programmer
 	}
 	return strings.ToUpper(a.getIdentifier())
 }
 
-func (a *arg) formatUsage() string {
+func (a *Arg) formatUsage() string {
 	if a.HideEntry {
 		return ""
 	}
@@ -138,14 +142,14 @@ func (a *arg) formatUsage() string {
 	return fmt.Sprintf("[%s] ", u)
 }
 
-func (a *arg) getIdentifier() string {
+func (a *Arg) getIdentifier() string {
 	if a.full != "" {
 		return a.full
 	}
 	return a.short
 }
 
-func (a *arg) formatHelpHeader(argument, meta Color) (size int, content string) {
+func (a *Arg) formatHelpHeader(argument, meta Color) (size int, content string) {
 	metaName := a.getMetaName()
 	if a.Positional {
 		size = len(metaName)
@@ -171,7 +175,7 @@ func (a *arg) formatHelpHeader(argument, meta Color) (size int, content string) 
 	return
 }
 
-func (a *arg) formatHelpWithExtraInfo() string {
+func (a *Arg) formatHelpWithExtraInfo() string {
 	help := a.Help
 	if help != "" {
 		help += " " // append a space after help info
@@ -195,7 +199,7 @@ func (a *arg) formatHelpWithExtraInfo() string {
 	return help
 }
 
-func (a *arg) dumpChoices() string {
+func (a *Arg) dumpChoices() string {
 	var choices []string
 	e := a.Choices[0]
 	switch e.(type) {
@@ -216,7 +220,7 @@ func (a *arg) dumpChoices() string {
 }
 
 // parse input & bind (default) value to target
-func (a *arg) parseValue(values []string) error {
+func (a *Arg) parseValue(values []string) error {
 	a.assigned = true
 	if a.Action != nil {
 		return a.Action(values)

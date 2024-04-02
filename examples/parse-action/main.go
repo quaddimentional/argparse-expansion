@@ -12,10 +12,10 @@ import (
 )
 
 func main() {
-	parser := argparse.NewParser("basic", "this is a basic program", &argparse.ParserConfig{DefaultAction: func() {
+	parser := argparse.NewParser("basic", "this is a basic program", &Argparse.ParserConfig{DefaultAction: func() {
 		fmt.Println("hi ~\ntell me what to do?")
 	}})
-	parser.AddCommand("test", "testing", &argparse.ParserConfig{DefaultAction: func() {
+	parser.AddCommand("test", "testing", &Argparse.ParserConfig{DefaultAction: func() {
 		fmt.Println("ok, now you know you are testing")
 	}})
 	if e := parser.Parse(nil); e != nil {

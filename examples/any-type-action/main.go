@@ -18,7 +18,7 @@ func main() {
 	parser := argparse.NewParser("basic", "this is a basic program", nil)
 	sum := 0
 	content := ""
-	parser.Strings("", "a", &argparse.Option{Positional: true, Action: func(args []string) error {
+	parser.Strings("", "a", &Argparse.Option{Positional: true, Action: func(args []string) error {
 		for _, arg := range args {
 			i, e := strconv.Atoi(arg)
 			if e != nil {
@@ -29,7 +29,7 @@ func main() {
 		return nil
 	}})
 
-	parser.String("", "b", &argparse.Option{Action: func(args []string) error {
+	parser.String("", "b", &Argparse.Option{Action: func(args []string) error {
 		raw, e := ioutil.ReadFile(args[0])
 		if e != nil {
 			return e

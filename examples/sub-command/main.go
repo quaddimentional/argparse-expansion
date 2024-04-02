@@ -17,13 +17,13 @@ import (
 
 func main() {
 	parser := argparse.NewParser("sub-command", "Go is a tool for managing Go source code.", nil)
-	t := parser.Flag("f", "flag", &argparse.Option{Help: "from main parser"})
-	testCommand := parser.AddCommand("test", "start a bug report", &argparse.ParserConfig{WithHint: true})
-	tFlag := testCommand.Flag("f", "flag", &argparse.Option{Help: "from test parser"})
-	otherFlag := testCommand.Flag("o", "other", &argparse.Option{HintInfo: "optional => ∫"})
-	floatWithChoice := testCommand.Float("", "float", &argparse.Option{Choices: []interface{}{0.1, 0.2}, Required: true})
-	defaultInt := testCommand.Int("i", "int", &argparse.Option{Default: "1", Help: "this is int"})
-	testCommand.String("s", "string", &argparse.Option{Default: "hello", Help: "no hint message", NoHint: true})
+	t := parser.Flag("f", "flag", &Argparse.Option{Help: "from main parser"})
+	testCommand := parser.AddCommand("test", "start a bug report", &Argparse.ParserConfig{WithHint: true})
+	tFlag := testCommand.Flag("f", "flag", &Argparse.Option{Help: "from test parser"})
+	otherFlag := testCommand.Flag("o", "other", &Argparse.Option{HintInfo: "optional => ∫"})
+	floatWithChoice := testCommand.Float("", "float", &Argparse.Option{Choices: []interface{}{0.1, 0.2}, Required: true})
+	defaultInt := testCommand.Int("i", "int", &Argparse.Option{Default: "1", Help: "this is int"})
+	testCommand.String("s", "string", &Argparse.Option{Default: "hello", Help: "no hint message", NoHint: true})
 	if e := parser.Parse(nil); e != nil {
 		switch e.(type) {
 		case argparse.BreakAfterHelp:
